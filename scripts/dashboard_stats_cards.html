@@ -1,0 +1,376 @@
+<!-- 
+DASHBOARD STATISTICS CARDS
+File: AdminLoginPanel/templates/employee-dashboard.html
+Insert this section AFTER the page header and BEFORE existing content sections
+(around line 150-200, right after the page title/header)
+
+This creates a responsive grid of 5 statistics cards showing:
+- Active Projects
+- Pending Projects
+- Active Tasks
+- Pending Tasks
+- Overdue Tasks
+-->
+
+<!-- Dashboard Statistics Section -->
+<section class="dashboard-stats-section mb-5">
+    <div class="container-fluid px-4">
+        
+        <!-- Section Title -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="dashboard-section-title mb-0">
+                    <i class="fas fa-chart-line me-2"></i>Dashboard Overview
+                </h2>
+                <p class="text-muted small mt-1">Real-time project and task statistics</p>
+            </div>
+        </div>
+        
+        <!-- Stats Cards Grid -->
+        <div class="row g-3">
+            
+            <!-- Card 1: Active Projects -->
+            <div class="col-md-6 col-lg-2-4">
+                <div class="stat-card dashboard-card active-projects-card">
+                    <div class="card-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="card-content">
+                        <h6 class="card-label">Active Projects</h6>
+                        <p class="card-value" id="activeProjectsCount">-</p>
+                        <small class="card-help">Running projects</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 2: Pending Projects -->
+            <div class="col-md-6 col-lg-2-4">
+                <div class="stat-card dashboard-card pending-projects-card">
+                    <div class="card-icon">
+                        <i class="fas fa-hourglass-start"></i>
+                    </div>
+                    <div class="card-content">
+                        <h6 class="card-label">Pending Projects</h6>
+                        <p class="card-value" id="pendingProjectsCount">-</p>
+                        <small class="card-help">Not started</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 3: Active Tasks -->
+            <div class="col-md-6 col-lg-2-4">
+                <div class="stat-card dashboard-card active-tasks-card">
+                    <div class="card-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="card-content">
+                        <h6 class="card-label">Active Tasks</h6>
+                        <p class="card-value" id="activeTasksCount">-</p>
+                        <small class="card-help">In progress & pending</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 4: Pending Tasks -->
+            <div class="col-md-6 col-lg-2-4">
+                <div class="stat-card dashboard-card pending-tasks-card">
+                    <div class="card-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="card-content">
+                        <h6 class="card-label">Pending Tasks</h6>
+                        <p class="card-value" id="pendingTasksCount">-</p>
+                        <small class="card-help">Not started</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 5: Overdue Tasks -->
+            <div class="col-md-6 col-lg-2-4">
+                <div class="stat-card dashboard-card overdue-tasks-card">
+                    <div class="card-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h6 class="card-label">Overdue Tasks</h6>
+                        <p class="card-value" id="overdueTasksCount">-</p>
+                        <small class="card-help">Requires attention</small>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</section>
+
+<!-- Styling for Dashboard Cards -->
+<style>
+    .dashboard-stats-section {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .dashboard-section-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--text);
+    }
+    
+    .dashboard-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: none;
+        cursor: default;
+        transition: all 0.3s ease;
+        min-height: 130px;
+    }
+    
+    .dashboard-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    }
+    
+    .dashboard-card .card-icon {
+        font-size: 2.5rem;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 60px;
+    }
+    
+    .dashboard-card .card-content {
+        flex: 1;
+        text-align: left;
+    }
+    
+    .dashboard-card .card-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        margin: 0 0 0.5rem 0;
+        opacity: 0.85;
+    }
+    
+    .dashboard-card .card-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1;
+    }
+    
+    .dashboard-card .card-help {
+        font-size: 0.75rem;
+        opacity: 0.7;
+        margin-top: 0.5rem;
+        display: block;
+    }
+    
+    /* Light Mode Colors */
+    .active-projects-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+    
+    .pending-projects-card {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(245, 87, 108, 0.2);
+    }
+    
+    .active-tasks-card {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.2);
+    }
+    
+    .pending-tasks-card {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(67, 233, 123, 0.2);
+    }
+    
+    .overdue-tasks-card {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(250, 112, 154, 0.2);
+    }
+    
+    /* Dark Mode Overrides */
+    .dark-mode .dashboard-card {
+        background: var(--bg-secondary);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+    
+    .dark-mode .active-projects-card,
+    .dark-mode .pending-projects-card,
+    .dark-mode .active-tasks-card,
+    .dark-mode .pending-tasks-card,
+    .dark-mode .overdue-tasks-card {
+        background: var(--bg-secondary);
+        color: var(--text);
+        border: 2px solid var(--border);
+    }
+    
+    .dark-mode .active-projects-card {
+        border-left: 4px solid #667eea;
+    }
+    
+    .dark-mode .pending-projects-card {
+        border-left: 4px solid #f5576c;
+    }
+    
+    .dark-mode .active-tasks-card {
+        border-left: 4px solid #4facfe;
+    }
+    
+    .dark-mode .pending-tasks-card {
+        border-left: 4px solid #43e97b;
+    }
+    
+    .dark-mode .overdue-tasks-card {
+        border-left: 4px solid #fa709a;
+    }
+    
+    /* Responsive Grid: 5 columns on large screens */
+    @media (min-width: 1400px) {
+        .col-lg-2-4 {
+            flex: 0 0 20%;
+            max-width: 20%;
+        }
+    }
+    
+    /* 4 columns on medium-large screens */
+    @media (min-width: 1200px) and (max-width: 1399px) {
+        .col-lg-2-4 {
+            flex: 0 0 25%;
+            max-width: 25%;
+        }
+    }
+    
+    /* 3 columns on tablets */
+    @media (min-width: 768px) and (max-width: 1199px) {
+        .col-lg-2-4 {
+            flex: 0 0 33.333%;
+            max-width: 33.333%;
+        }
+        
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+    
+    /* 2 columns on small devices */
+    @media (max-width: 767px) {
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+        
+        .dashboard-card {
+            min-height: 110px;
+            padding: 1rem;
+        }
+        
+        .dashboard-card .card-icon {
+            font-size: 2rem;
+            min-width: 50px;
+        }
+        
+        .dashboard-card .card-value {
+            font-size: 1.5rem;
+        }
+    }
+    
+    /* Single column on extra small screens */
+    @media (max-width: 575px) {
+        .col-md-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+</style>
+
+<!-- JavaScript to Load Dashboard Stats -->
+<script>
+    /**
+     * Load dashboard statistics from backend API
+     * Fetches counts for all 5 metrics and updates the DOM
+     */
+    function loadDashboardStats() {
+        console.log("[v0] Loading dashboard statistics...");
+        
+        // Show loading state
+        document.getElementById('activeProjectsCount').textContent = '...';
+        document.getElementById('pendingProjectsCount').textContent = '...';
+        document.getElementById('activeTasksCount').textContent = '...';
+        document.getElementById('pendingTasksCount').textContent = '...';
+        document.getElementById('overdueTasksCount').textContent = '...';
+        
+        // Fetch stats from backend
+        fetch('/api/dashboard/stats')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("[v0] Dashboard stats received:", data);
+                
+                if (data.success && data.data) {
+                    const stats = data.data;
+                    
+                    // Update DOM with fetched values
+                    document.getElementById('activeProjectsCount').textContent = stats.active_projects;
+                    document.getElementById('pendingProjectsCount').textContent = stats.pending_projects;
+                    document.getElementById('activeTasksCount').textContent = stats.active_tasks;
+                    document.getElementById('pendingTasksCount').textContent = stats.pending_tasks;
+                    document.getElementById('overdueTasksCount').textContent = stats.overdue_tasks;
+                    
+                    console.log("[v0] Dashboard stats loaded successfully");
+                } else {
+                    console.error("[v0] Invalid response format:", data);
+                    showStatsError();
+                }
+            })
+            .catch(error => {
+                console.error("[v0] Error loading dashboard stats:", error);
+                showStatsError();
+            });
+    }
+    
+    /**
+     * Show error state in dashboard cards
+     */
+    function showStatsError() {
+        document.getElementById('activeProjectsCount').textContent = 'N/A';
+        document.getElementById('pendingProjectsCount').textContent = 'N/A';
+        document.getElementById('activeTasksCount').textContent = 'N/A';
+        document.getElementById('pendingTasksCount').textContent = 'N/A';
+        document.getElementById('overdueTasksCount').textContent = 'N/A';
+    }
+    
+    // Load stats when page loads
+    document.addEventListener('DOMContentLoaded', loadDashboardStats);
+    
+    // Refresh stats every 30 seconds
+    setInterval(loadDashboardStats, 30000);
+</script>
