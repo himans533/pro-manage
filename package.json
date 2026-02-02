@@ -1,21 +1,5 @@
 {
-  "name": "pro-manage",
-  "version": "1.0.0",
-  "description": "Professional Project Management System with Hierarchy",
-  "main": "AdminLoginPanel/app.py",
-  "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js"
-  },
   "dependencies": {
-    "express": "^4.18.2",
-    "express-session": "^1.17.3"
-  },
-  "keywords": [
-    "project-management",
-    "flask",
-    "hierarchy"
-  ],
-  "author": "Your Team",
-  "license": "MIT"
+    "flask": "^0.2.10"
+  }
 }
