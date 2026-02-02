@@ -19,8 +19,14 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
-# Proper secret key for Flask sessions
-app.secret_key = secrets.token_hex(32)
+# Persistent secret key for Replit environment
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'default_stable_secret_key_12345')
+
+# Enable permanent sessions
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True
 
 valid_tokens = {}
 
@@ -866,12 +872,17 @@ def login_step2():
         return jsonify({"error": "Invalid OTP provided."}), 400
 
     session_token = secrets.token_urlsafe(32)
+    
+    # Crucial: Set session values correctly for admin_required
+    session.permanent = True
     session['admin'] = True
-    session['admin_token'] = session_token
+    session['user_id'] = 0
+    session['username'] = 'admin'
     session['user_type'] = 'admin'
+    session['admin_token'] = session_token
 
     valid_tokens[session_token] = {
-        'user_id': 0,  # Admin has ID 0
+        'user_id': 0,
         'username': 'admin',
         'user_type': 'admin',
         'created_at': datetime.now(timezone.utc)
