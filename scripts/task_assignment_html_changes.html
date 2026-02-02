@@ -1,0 +1,75 @@
+<!-- 
+  TASK ASSIGNMENT HTML CHANGES
+  =============================
+  Minimal HTML changes required - mostly JavaScript updates
+  
+  Location: /AdminLoginPanel/templates/employee-dashboard.html
+-->
+
+<!-- 
+  CHANGE #1: Add event listener to task project dropdown
+  ========================================================
+  Location: Around line 2684-2687 (Task Project select)
+  
+  AFTER the <select id="taskProject"> closing </select>, 
+  add this onchange handler:
+-->
+
+<div class="form-group">
+  <label>Project *</label>
+  <select id="taskProject" required 
+          onchange="handleTaskProjectChange(this.value)">
+    <option value="">Select a project</option>
+  </select>
+</div>
+
+<!-- Add this JavaScript function in the main script section -->
+<script>
+function handleTaskProjectChange(projectId) {
+  if (projectId) {
+    // Load eligible assignees when project is selected
+    populateTaskAssigneeDropdown(parseInt(projectId));
+  }
+}
+</script>
+
+
+<!-- 
+  CHANGE #2: Update assignee dropdown initialization
+  ===================================================
+  Location: Lines 2689-2691 (Assign To dropdown)
+  
+  CURRENT CODE:
+  <label>Assign To</label><select id="taskAssignee">
+    <option value="">Unassigned</option>
+  </select>
+  
+  NO CHANGE NEEDED - Keep as is
+  JavaScript will populate it dynamically
+-->
+
+<div class="form-group">
+  <label>Assign To</label>
+  <select id="taskAssignee">
+    <option value="">Unassigned</option>
+  </select>
+</div>
+
+
+<!-- 
+  SUMMARY
+  =======
+  
+  1. NO HTML CHANGES NEEDED IN THE FORM ITSELF
+  
+  2. Just add onchange handler to taskProject select:
+     onchange="handleTaskProjectChange(this.value)"
+  
+  3. Add new JavaScript functions:
+     - populateTaskAssigneeDropdown(projectId)
+     - handleTaskProjectChange(projectId)
+  
+  4. Update event listener for project changes
+  
+  5. All filtering happens dynamically via JavaScript + Backend API
+-->
