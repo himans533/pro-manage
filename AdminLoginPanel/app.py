@@ -633,15 +633,20 @@ def login_page():
 
 @app.route("/admin-dashboard")
 def admin_dashboard():
-    # Force check session for admin
-    if session.get('admin') or session.get('user_type') == 'admin':
+    # Priority 1: Check session explicitly
+    if session.get('admin') is True or session.get('user_type') == 'admin':
         return render_template("admin-dashboard.html")
     
-    # Check for Bearer token fallback
-    auth_header = request.headers.get('Authorization')
-    if auth_header and auth_header.startswith('Bearer '):
-        token = auth_header.split(' ')[1]
-        if token in valid_tokens and valid_tokens[token].get('user_type') == 'admin':
+    # Priority 2: Check for Bearer token in headers or Cookie
+    auth_token = request.headers.get('Authorization', '').replace('Bearer ', '') or request.cookies.get('session_token')
+    
+    if auth_token and auth_token in valid_tokens:
+        token_data = valid_tokens[auth_token]
+        if token_data.get('user_type') == 'admin':
+            # Synchronize session if token is valid but session is missing
+            session['admin'] = True
+            session['user_type'] = 'admin'
+            session['user_id'] = token_data.get('user_id', 0)
             return render_template("admin-dashboard.html")
             
     return redirect("/login")
