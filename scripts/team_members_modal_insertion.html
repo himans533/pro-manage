@@ -1,0 +1,263 @@
+<!-- 
+  ADD TEAM MEMBERS TO PROJECT MODAL
+  Insert this code into project-detail.html before the closing </body> tag
+  
+  Location: /AdminLoginPanel/templates/project-detail.html
+  Insert before: </body> (last line)
+-->
+
+<!-- Button Section - Insert in project header area after "Back to Dashboard" button -->
+<div class="mt-3" id="coordinatorActions" style="display: none;">
+  <button class="btn btn-primary" id="openAddTeamMembersModal" data-bs-toggle="modal" data-bs-target="#addTeamMembersModal">
+    <i class="bi bi-person-plus"></i> Add Team Members to Project
+  </button>
+</div>
+
+<!-- Modal Dialog -->
+<div class="modal fade" id="addTeamMembersModal" tabindex="-1" aria-labelledby="addTeamMembersModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="addTeamMembersModalLabel">
+          <i class="bi bi-people-fill"></i> Add Team Members to Project
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Instructions Alert -->
+        <div class="alert alert-info" role="alert">
+          <strong>Instructions:</strong> Select 2-3 employees from your team to assign to this project.
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="text-center" style="display: none;">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading team members...</p>
+        </div>
+
+        <!-- Employees List -->
+        <div id="employeesList" class="list-group">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center text-muted py-4" style="display: none;">
+          <p>No eligible team members available to add.</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="alert alert-danger mt-3" role="alert" style="display: none;"></div>
+
+        <!-- Selection Counter -->
+        <div class="mt-4">
+          <p class="text-muted mb-2">
+            Selected: <strong id="selectedCount">0</strong> / 3 team members
+          </p>
+          <div class="progress" style="height: 22px;">
+            <div id="selectedProgress" class="progress-bar bg-success" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="3"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="addTeamMembersSubmitBtn" disabled>
+          <span id="submitBtnText">Add Selected Members</span>
+          <span id="submitBtnSpinner" class="spinner-border spinner-border-sm ms-2" role="status" aria-hidden="true" style="display: none;"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('addTeamMembersModal');
+  const projectId = '{{ project.id }}';
+  const isCoordinator = {{ 'true' if is_coordinator else 'false' }};
+  
+  let selectedMembers = [];
+  const MAX_MEMBERS = 3;
+  const MIN_MEMBERS = 2;
+
+  // Show button only for coordinators
+  if (isCoordinator) {
+    document.getElementById('coordinatorActions').style.display = 'block';
+  }
+
+  // Load employees when modal opens
+  modal?.addEventListener('show.bs.modal', function() {
+    loadEligibleEmployees();
+  });
+
+  // Load eligible employees from backend
+  async function loadEligibleEmployees() {
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const employeesList = document.getElementById('employeesList');
+    const emptyState = document.getElementById('emptyState');
+    const errorMessage = document.getElementById('errorMessage');
+
+    loadingSpinner.style.display = 'block';
+    employeesList.innerHTML = '';
+    emptyState.style.display = 'none';
+    errorMessage.style.display = 'none';
+
+    try {
+      const response = await fetch(`/api/coordinator/eligible-team-members/${projectId}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to load employees');
+      }
+
+      const data = await response.json();
+      const employees = data.employees || [];
+
+      loadingSpinner.style.display = 'none';
+
+      if (employees.length === 0) {
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      // Create checkboxes for each employee
+      employees.forEach(emp => {
+        const checkboxId = `emp_${emp.id}`;
+        const div = document.createElement('div');
+        div.className = 'list-group-item d-flex align-items-center';
+        div.innerHTML = `
+          <input 
+            class="form-check-input me-3 employeeCheckbox" 
+            type="checkbox" 
+            id="${checkboxId}" 
+            value="${emp.id}" 
+            data-name="${emp.username}">
+          <label class="form-check-label w-100 mb-0 cursor-pointer" for="${checkboxId}">
+            <strong>${emp.username}</strong>
+            <br>
+            <small class="text-muted">${emp.email}</small>
+          </label>
+        `;
+        employeesList.appendChild(div);
+
+        // Add change listener
+        document.getElementById(checkboxId).addEventListener('change', handleCheckboxChange);
+      });
+
+    } catch (error) {
+      console.error('Error loading employees:', error);
+      loadingSpinner.style.display = 'none';
+      errorMessage.textContent = `Error: ${error.message}`;
+      errorMessage.style.display = 'block';
+    }
+  }
+
+  // Handle checkbox changes
+  function handleCheckboxChange() {
+    const checkboxes = document.querySelectorAll('.employeeCheckbox:checked');
+    
+    // Enforce max 3 selections
+    if (checkboxes.length > MAX_MEMBERS) {
+      this.checked = false;
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = `Maximum ${MAX_MEMBERS} team members can be selected`;
+      errorMessage.style.display = 'block';
+      return;
+    }
+
+    // Hide error if valid
+    if (checkboxes.length <= MAX_MEMBERS) {
+      document.getElementById('errorMessage').style.display = 'none';
+    }
+
+    // Update selection list
+    selectedMembers = Array.from(checkboxes).map(cb => ({
+      id: cb.value,
+      name: cb.dataset.name
+    }));
+
+    updateSelectionUI();
+  }
+
+  // Update UI elements
+  function updateSelectionUI() {
+    const count = selectedMembers.length;
+    document.getElementById('selectedCount').textContent = count;
+    document.getElementById('selectedProgress').style.width = `${(count / MAX_MEMBERS) * 100}%`;
+    document.getElementById('selectedProgress').setAttribute('aria-valuenow', count);
+
+    const submitBtn = document.getElementById('addTeamMembersSubmitBtn');
+    submitBtn.disabled = count < 1;
+
+    const btnText = document.getElementById('submitBtnText');
+    if (count > 0) {
+      btnText.textContent = `Add ${count} Member${count > 1 ? 's' : ''}`;
+    } else {
+      btnText.textContent = 'Add Selected Members';
+    }
+  }
+
+  // Submit handler
+  document.getElementById('addTeamMembersSubmitBtn').addEventListener('click', async function() {
+    if (selectedMembers.length < 1) {
+      alert('Please select at least one team member');
+      return;
+    }
+
+    const submitBtn = this;
+    const submitBtnText = document.getElementById('submitBtnText');
+    const submitBtnSpinner = document.getElementById('submitBtnSpinner');
+
+    submitBtn.disabled = true;
+    submitBtnText.style.display = 'none';
+    submitBtnSpinner.style.display = 'inline-block';
+
+    try {
+      const response = await fetch(`/api/coordinator/add-team-members/${projectId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_ids: selectedMembers.map(m => m.id)
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add team members');
+      }
+
+      alert('Team members added successfully!');
+      
+      // Close modal and reload
+      bootstrap.Modal.getInstance(modal).hide();
+      setTimeout(() => window.location.reload(), 300);
+
+    } catch (error) {
+      console.error('Error:', error);
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = `Error: ${error.message}`;
+      errorMessage.style.display = 'block';
+      
+      submitBtn.disabled = false;
+      submitBtnText.style.display = 'inline';
+      submitBtnSpinner.style.display = 'none';
+    }
+  });
+
+  // Reset on modal close
+  modal?.addEventListener('hide.bs.modal', function() {
+    selectedMembers = [];
+    document.getElementById('selectedCount').textContent = '0';
+    document.getElementById('selectedProgress').style.width = '0%';
+    document.getElementById('errorMessage').style.display = 'none';
+  });
+});
+</script>
+
+<!-- Bootstrap Icons CSS (add to page <head> if not present) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
