@@ -1,0 +1,133 @@
+PRO-MANAGE: RUNNING YOUR APPLICATION
+
+IMPORTANT: v0 Preview vs Local Development
+=====================================
+
+v0 PREVIEW (Current):
+- Now shows a mock Node.js/Express interface
+- Demonstrates the UI and role-based access control
+- Shows what the application looks like
+- Available at the preview URL
+
+LOCAL/PRODUCTION (Real Application):
+- Full Python Flask backend with real database
+- Complete project management features
+- Real-time updates and operations
+- Must be run on your own machine or server
+
+
+TO RUN THE REAL FLASK APPLICATION LOCALLY:
+==========================================
+
+Step 1: Install Python Dependencies
+-----------------------------------
+cd AdminLoginPanel
+pip install -r requirements.txt
+
+Step 2: Initialize Database
+---------------------------
+python
+>>> from app import init_db
+>>> init_db()
+>>> exit()
+
+Step 3: Run Flask Server
+------------------------
+python app.py
+
+OR use the run.py script:
+python ../run.py
+
+Step 4: Access Application
+--------------------------
+Open browser: http://localhost:5000
+
+Login credentials:
+- Email: anubha@gmail.com
+- Password: Anubha@#46
+- OTP: 654321
+
+
+DEPLOYMENT OPTIONS:
+===================
+
+1. HEROKU (Recommended for beginners)
+   - Create account at heroku.com
+   - Install Heroku CLI
+   - Run: heroku create pro-manage
+   - Run: git push heroku main
+   - App runs at https://pro-manage.herokuapp.com
+
+2. RAILWAY.APP
+   - Connect GitHub repo
+   - Auto-deploys on push
+   - Free tier available
+
+3. PythonAnywhere
+   - Web hosting for Python
+   - No setup needed
+   - Free option available at pythonanywhere.com
+
+4. AWS/Google Cloud
+   - Full control and scalability
+   - Requires more configuration
+   - Pay-as-you-go pricing
+
+5. DigitalOcean App Platform
+   - Easy Docker deployment
+   - $5-12/month
+   - Great documentation
+
+
+CURRENT V0 PREVIEW:
+==================
+The Express.js mock server shows:
+- Login interface with role-based access
+- Admin Dashboard (Super Admin view)
+- Employee Dashboard (Limited view)
+- Role-based data filtering
+- Demo accounts for testing
+
+Try these demo accounts in the preview:
+1. Super Admin: sees all projects and tasks
+2. Coordinator: sees only their projects
+3. Team Member: sees only their assigned tasks
+
+
+FOLDER STRUCTURE:
+================
+/AdminLoginPanel/
+  ├── app.py (Main Flask application)
+  ├── models.py (Database models)
+  ├── templates/ (HTML templates)
+  │   ├── admin-dashboard.html
+  │   ├── employee-dashboard.html
+  │   ├── login.html
+  │   └── ...
+  ├── static/ (CSS, JS, images)
+  └── requirements.txt (Python dependencies)
+
+/scripts/ (Reference implementations)
+├── SQL migration files
+├── Python backend code
+└── HTML components
+
+/ (Root)
+├── package.json (For v0 preview)
+├── server.js (Mock Express server for preview)
+├── run.py (Flask entry point)
+└── Documentation files
+
+
+FEATURES:
+=========
+- User Hierarchy: Super Admin → Coordinator → Team Members
+- Project Management with team coordination
+- Task assignment and tracking
+- Real-time dashboards with statistics
+- Role-based access control
+- Team member management (2-3 per project)
+- Hierarchy visualization
+- Complete authorization system
+
+Ready to deploy? Start with local testing, then choose a deployment option above!

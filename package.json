@@ -4,9 +4,12 @@
   "description": "Professional Project Management System with Hierarchy",
   "main": "AdminLoginPanel/app.py",
   "scripts": {
-    "dev": "python run.py",
-    "start": "python run.py",
-    "test": "cd AdminLoginPanel && python -m pytest"
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3"
   },
   "keywords": [
     "project-management",
