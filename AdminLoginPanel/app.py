@@ -582,7 +582,9 @@ def admin_required(f):
             is_admin = True
 
         if not is_admin:
-            return jsonify({"error": "Admin access required"}), 403
+            if request.is_json:
+                return jsonify({"error": "Admin access required"}), 403
+            return redirect("/login")
         return f(*args, **kwargs)
 
     return decorated_function
