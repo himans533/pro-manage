@@ -633,7 +633,18 @@ def login_page():
 
 @app.route("/admin-dashboard")
 def admin_dashboard():
-    return render_template("admin-dashboard.html")
+    # Force check session for admin
+    if session.get('admin') or session.get('user_type') == 'admin':
+        return render_template("admin-dashboard.html")
+    
+    # Check for Bearer token fallback
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(' ')[1]
+        if token in valid_tokens and valid_tokens[token].get('user_type') == 'admin':
+            return render_template("admin-dashboard.html")
+            
+    return redirect("/login")
 
 
 @app.route("/employee-dashboard")

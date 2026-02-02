@@ -922,20 +922,18 @@
                     "success",
                 );
                 
+                // Set localStorage items first
+                localStorage.setItem("admin_session_token", data.session_token);
+                localStorage.setItem("admin_name", data.admin_name);
+                localStorage.setItem("userRole", "admin");
+                
                 // Explicitly set session cookie with very clear parameters
                 document.cookie = "session_token=" + data.session_token + "; path=/; SameSite=Lax; max-age=86400";
                 
-                localStorage.setItem(
-                    "admin_session_token",
-                    data.session_token,
-                );
-                localStorage.setItem("admin_name", data.admin_name);
-                localStorage.setItem("userRole", "admin");
-
+                // Small delay to ensure cookies/localStorage are committed
                 setTimeout(() => {
-                    // Use force reload on redirect to ensure session is picked up
                     window.location.href = "/admin-dashboard";
-                }, 1000);
+                }, 500);
             } catch (error) {
                 console.error("Admin Step2 Error:", error);
                 document
