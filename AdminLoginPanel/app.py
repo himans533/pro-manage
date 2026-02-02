@@ -39,22 +39,14 @@ app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'project_management.db')
 
-
-DATABASE = DB_PATH
-project_management = DB_PATH
-
 def get_db_connection():
-    # Use a longer timeout and allow connections from worker threads.
-    # Enable WAL and foreign keys to improve concurrency with SQLite.
+    # Force use of SQLite
     conn = sqlite3.connect(DB_PATH, timeout=30, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     try:
-        # Enable foreign key enforcement and WAL journal for better concurrency
         conn.execute('PRAGMA foreign_keys = ON')
         conn.execute('PRAGMA journal_mode = WAL')
-        conn.execute('PRAGMA busy_timeout = 30000')
     except Exception:
-        # If PRAGMA fails for any reason, continue with the connection
         pass
     return conn
 
