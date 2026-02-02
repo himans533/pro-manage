@@ -1,0 +1,135 @@
+================================================================================
+                   PRO-MANAGE QUICK START GUIDE
+================================================================================
+
+FASTEST WAY TO RUN YOUR PROJECT (2 minutes):
+
+1. INSTALL DEPENDENCIES:
+   pip install -r AdminLoginPanel/requirements.txt
+
+2. RUN THE APPLICATION:
+   python run.py
+
+3. OPEN IN BROWSER:
+   http://localhost:5000
+
+4. LOGIN WITH:
+   Email: anubha@gmail.com
+   Password: Anubha@#46
+   OTP: 654321
+
+================================================================================
+
+WHAT YOU'LL SEE:
+
+Admin Dashboard:
+  - User Hierarchy visualization (expandable tree)
+  - Dashboard statistics (5 cards with real-time metrics)
+  - Project management interface
+  - Daily reports and activities
+  - Full organizational view
+
+Employee Dashboard:
+  - My Projects (filtered by role)
+  - My Tasks (only assigned tasks)
+  - Task status tracking
+  - Performance metrics
+
+================================================================================
+
+ALTERNATIVE WAYS TO RUN:
+
+Using npm:
+  npm run dev
+
+Direct Python:
+  cd AdminLoginPanel
+  python app.py
+
+Using custom port:
+  PORT=8000 python run.py
+
+================================================================================
+
+PROJECT STRUCTURE:
+
+AdminLoginPanel/
+  ├── app.py                    → Main Flask backend
+  ├── templates/
+  │   ├── admin-dashboard.html  → Admin interface
+  │   ├── employee-dashboard.html → Employee interface
+  │   └── project-detail.html   → Project details
+  ├── static/
+  │   ├── css/                  → Stylesheets
+  │   └── js/                   → JavaScript
+  └── project_management.db     → Auto-created database
+
+================================================================================
+
+DATABASE:
+
+- Automatically created on first run
+- SQLite database with all necessary tables
+- Pre-initialized with schema for:
+  * Users (with hierarchy via parent_user_id)
+  * Projects (with team coordination)
+  * Tasks (with status tracking)
+  * Milestones, Daily Reports, Activities
+
+Reset database (if needed):
+  cd AdminLoginPanel
+  rm project_management.db
+  python check_db_script.py
+
+================================================================================
+
+TROUBLESHOOTING:
+
+Port 5000 already in use?
+  → Use: PORT=8000 python run.py
+
+"Module not found" error?
+  → Run: pip install -r AdminLoginPanel/requirements.txt
+
+Templates not found?
+  → Ensure you run from project root directory
+
+Database locked?
+  → Delete project_management.db and restart
+
+================================================================================
+
+FEATURES READY TO USE:
+
+✓ Role-based user hierarchy
+✓ Project coordinator assignment
+✓ Team member management (2-3 per project)
+✓ Task creation and assignment
+✓ Real-time dashboard metrics
+✓ Interactive organization tree
+✓ Coordinator details view
+✓ Task status tracking
+✓ Daily reports
+✓ Authorization & security
+
+================================================================================
+
+NEXT STEPS:
+
+1. Run: python run.py
+2. Login as admin
+3. Create project coordinators
+4. Create team members
+5. Create projects and assign coordinators
+6. Add team members to projects
+7. Create milestones and tasks
+8. Assign tasks to team members
+9. Track progress on dashboard
+
+================================================================================
+
+For detailed documentation: See SETUP_AND_RUN_GUIDE.md
+
+Happy Project Managing! 🚀
+
+================================================================================

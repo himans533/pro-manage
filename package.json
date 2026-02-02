@@ -1,6 +1,18 @@
 {
-  "dependencies": {
-    "flask": "^0.2.10",
-    "python": "^0.0.4"
-  }
+  "name": "pro-manage",
+  "version": "1.0.0",
+  "description": "Professional Project Management System with Hierarchy",
+  "main": "AdminLoginPanel/app.py",
+  "scripts": {
+    "dev": "python run.py",
+    "start": "python run.py",
+    "test": "cd AdminLoginPanel && python -m pytest"
+  },
+  "keywords": [
+    "project-management",
+    "flask",
+    "hierarchy"
+  ],
+  "author": "Your Team",
+  "license": "MIT"
 }

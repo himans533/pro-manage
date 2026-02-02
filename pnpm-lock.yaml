@@ -6,26 +6,4 @@ settings:
 
 importers:
 
-  .:
-    dependencies:
-      flask:
-        specifier: ^0.2.10
-        version: 0.2.10
-      python:
-        specifier: ^0.0.4
-        version: 0.0.4
-
-packages:
-
-  flask@0.2.10:
-    resolution: {integrity: sha512-Zy69KIuFsoX0o2W5uDHHk1GHMwRT8QT0AboPQY7b1soCfJ2pfwKxHF2AGVwJmDUjzawgOavoY/UsXnZ7fk3lVQ==}
-
-  python@0.0.4:
-    resolution: {integrity: sha512-7avKA/6XxrwcGSDes8xGn7FHAUdAUQXKHtpjDulyv5/nm7TcPblmPRvXjjwx5knWHqeRiipqH/TZR2HhmJ4CGQ==}
-    engines: {node: '>= 0.4.1'}
-
-snapshots:
-
-  flask@0.2.10: {}
-
-  python@0.0.4: {}
+  .: {}
